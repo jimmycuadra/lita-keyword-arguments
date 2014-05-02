@@ -46,7 +46,7 @@ end
 The above `:kwargs` hash would make lita-keyword-arguments recognize the following in messages:
 
 ```
-[--foo VALUE] [-b | --bar VALUE] [-v | --verbose]
+[--foo VALUE] [-b | --bar VALUE] [-v | --verbose | --no-verbose]
 ```
 
 The `:bar` keyword be set to the string "unset" if no value was provided in the message.
