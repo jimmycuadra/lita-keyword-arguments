@@ -25,14 +25,13 @@ class MyHandler < Lita::Handler
     :callback
     command: true,
     kwargs: {
-      foo: {
-        short: "f",
-        long: "foo",
+      foo: {},
+      bar: {
+        short: "b",
         default: "unset"
       },
       verbose: {
         short: "v",
-        long: "verbose",
         boolean: true
       }
     }
@@ -44,29 +43,37 @@ class MyHandler < Lita::Handler
 end
 ```
 
+The above `:kwargs` hash would make lita-keyword-arguments recognize the following in messages:
+
+```
+[--foo VALUE] [-b | --bar VALUE] [-v | --verbose]
+```
+
+The `:bar` keyword be set to the string "unset" if no value was provided in the message.
+
+
 The possible keys for each keyword argument's specification are:
 
-* `:short` - A single letter to use for the short flag. Invoked with a single preceeding dash.
-* `:long` - A word to use for the long flag. Invoked with two preceeding dashes.
-* `:boolean` - The flag represents a boolean and does not have an argument. Set to true by providing the flag. Set to false by providing the long version of the flag, prefixing the keyword with "no-". For example: "--no-verbose".
+* `:short` - A single letter to use for the short flag. Invoked with a single preceeding dash. For example: "-f".
+* `:boolean` - The kwarg represents a boolean and does not have an argument. Set to true by providing the flag. Set to false by providing the long version of the flag, prefixing the keyword with "no-". For example: "--no-verbose".
 * `:default` - A default value to give the keyword argument if the flag is not provided in the message.
 
-Either `:short` or `:long` is required. The other keys are optional.
+The long flag (e.g. --foo) is automatically created from the key.
 
 Example messages and their resulting hashes:
 
 ``` ruby
-# Lita: my_command -f bar
-{ foo: "bar" }
+# Lita: my_command -b hello
+{ bar: "hello" }
 
 # Lita: my_command --foo baz
-{ foo: "baz" }
+{ foo: "baz", bar: "unset" }
 
 # Lita: my_command -v
-{ foo: "unset", verbose: true }
+{ bar: "unset", verbose: true }
 
 # Lita: my_command --no-verbose
-{ foo: "unset", verbose: false }
+{ bar: "unset", verbose: false }
 ```
 
 ## License

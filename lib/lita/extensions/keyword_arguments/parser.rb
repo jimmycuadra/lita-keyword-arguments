@@ -1,76 +1,39 @@
-require 'optparse'
+require 'slop'
 
 module Lita
   module Extensions
     class KeywordArguments
       class Parser
-        attr_reader :kwargs, :args, :spec
+        attr_reader :args, :spec
 
         def initialize(spec, args)
           @spec = spec
           @args = args
-          @kwargs = {}
         end
 
         def parse
           spec.each { |name, option_spec| add_option(name, option_spec) }
-
-          begin
-            parser.parse(args)
-          rescue OptionParser::InvalidOption
-          end
-
-          add_defaults
-
-          kwargs
+          parser.parse(args)
+          parser.to_hash
         end
 
         private
 
-        def add_defaults
-          spec.each do |name, option_spec|
-            kwargs[name] ||= option_spec[:default] if option_spec[:default]
-          end
-        end
-
         def add_option(name, spec)
-          return unless spec[:short] || spec[:long]
+          opt_args = []
+          opt_options = {}
 
-          parser.on(*spec_args(spec)) do |value|
-            kwargs[name] = clean_value(value)
-          end
-        end
+          opt_args << spec[:short] if spec[:short]
+          opt_args << name
+          opt_options[:default] = spec[:default] if spec[:default]
+          opt_options[:optional_argument] = true unless spec[:boolean]
+          opt_args << opt_options
 
-        def clean_value(value)
-          if TrueClass === value || FalseClass === value
-            value
-          elsif value.nil?
-            nil
-          else
-            value.strip
-          end
+          parser.on(*opt_args)
         end
 
         def parser
-          @parser ||= OptionParser.new
-        end
-
-        def spec_args(spec)
-          opt_args = []
-
-          if spec[:short] && spec[:boolean]
-            opt_args << "-#{spec[:short]}"
-          elsif spec[:short]
-            opt_args << "-#{spec[:short]} [VALUE]"
-          end
-
-          if spec[:long] && spec[:boolean]
-            opt_args << "--[no-]#{spec[:long]}"
-          elsif spec[:long]
-            opt_args << "--#{spec[:long]} [VALUE]"
-          end
-
-          opt_args
+          @parser ||= Slop.new
         end
       end
     end
