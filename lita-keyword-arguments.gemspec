@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = "lita-keyword-arguments"
-  spec.version       = "0.0.1"
+  spec.version       = "1.0.0"
   spec.authors       = ["Jimmy Cuadra"]
   spec.email         = ["jimmy@jimmycuadra.com"]
   spec.description   = %q{A Lita extension to extract CLI-style arguments from messages.}
@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency "lita", ">= 3.2"
-  spec.add_runtime_dependency "slop", ">= 3.5"
+  spec.add_runtime_dependency "slop", "~> 3.5"
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
