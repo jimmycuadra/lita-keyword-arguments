@@ -10,6 +10,12 @@ Add lita-keyword-arguments to your Lita plugin's gemspec:
 spec.add_runtime_dependency "lita-keyword-arguments"
 ```
 
+Require it in your Lita plugin's source:
+
+``` ruby
+require "lita-keyword-arguments"
+```
+
 ## Usage
 
 Define keyword arguments for a route using the `kwargs` option. The value should be a hash, mapping keywords to a hash detailing the rules about that keyword.
