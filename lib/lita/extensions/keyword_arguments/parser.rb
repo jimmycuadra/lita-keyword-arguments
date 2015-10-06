@@ -8,7 +8,7 @@ module Lita
 
         def initialize(spec, args)
           @spec = spec
-          @args = args
+          @args = prepare_args(args)
         end
 
         def parse
@@ -30,6 +30,12 @@ module Lita
           opt_args << opt_options
 
           parser.on(*opt_args)
+        end
+
+        def prepare_args(args)
+          args.map do |arg|
+            arg.tr('—', '--')
+          end
         end
 
         def parser
