@@ -10,6 +10,15 @@ describe Lita::Extensions::KeywordArguments::Parser do
     expect(subject.parse).to eq(foo: "bar")
   end
 
+  it "parses mdash flags" do
+    subject = described_class.new(
+      { foo: {} },
+      "—foo bar".split
+    )
+
+    expect(subject.parse).to eq(foo: "bar")
+  end
+
   it "sets missing arguments to nil" do
     subject = described_class.new(
       { foo: {} },
